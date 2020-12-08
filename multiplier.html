@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Standard Meta -->
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>STLX Multiplier DEMO</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
+<script>
+	var m = 2;
+	var balance = 1000;
+	
+	async function animation(value)
+	{
+		var ndiv = document.getElementById('number');;
+		ndiv.innerHTML = "432";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "461";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "871";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "512";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "89";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "534";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "761";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "234";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "654";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = "768";
+		await new Promise(r => setTimeout(r, 10));
+		ndiv.innerHTML = value;
+		document.getElementById("bhi").disabled = false;
+		document.getElementById("blo").disabled = false;
+	}
+	
+	function isNumeric(n) {
+		return !isNaN(parseFloat(n)) && isFinite(n);
+	}
+	
+	function changeMultiplier(value)
+	{
+		m = value;
+		if(value == 2)
+		{
+			document.getElementById("bx2").classList.add('blue');
+			document.getElementById("bx3").classList.remove('blue');
+			document.getElementById("bx5").classList.remove('blue');
+			document.getElementById("bx10").classList.remove('blue');
+			document.getElementById('x2').style.display = 'inline';
+			document.getElementById('x3').style.display = 'none';
+			document.getElementById('x5').style.display = 'none';
+			document.getElementById('x10').style.display = 'none';
+		}
+		if(value == 3)
+		{
+			document.getElementById("bx2").classList.remove('blue');
+			document.getElementById("bx3").classList.add('blue');
+			document.getElementById("bx5").classList.remove('blue');
+			document.getElementById("bx10").classList.remove('blue');
+			document.getElementById('x2').style.display = 'none';
+			document.getElementById('x3').style.display = 'inline';
+			document.getElementById('x5').style.display = 'none';
+			document.getElementById('x10').style.display = 'none';
+		}
+		if(value == 5)
+		{
+			document.getElementById("bx2").classList.remove('blue');
+			document.getElementById("bx3").classList.remove('blue');
+			document.getElementById("bx5").classList.add('blue');
+			document.getElementById("bx10").classList.remove('blue');
+			document.getElementById('x2').style.display = 'none';
+			document.getElementById('x3').style.display = 'none';
+			document.getElementById('x5').style.display = 'inline';
+			document.getElementById('x10').style.display = 'none';
+		}
+		if(value == 10)
+		{
+			document.getElementById("bx2").classList.remove('blue');
+			document.getElementById("bx3").classList.remove('blue');
+			document.getElementById("bx5").classList.remove('blue');
+			document.getElementById("bx10").classList.add('blue');
+			document.getElementById('x2').style.display = 'none';
+			document.getElementById('x3').style.display = 'none';
+			document.getElementById('x5').style.display = 'none';
+			document.getElementById('x10').style.display = 'inline';
+		}
+	}
+	
+	async function hi()
+	{
+		document.getElementById("bhi").disabled = true;
+		document.getElementById("blo").disabled = true;
+		if(isNumeric(document.getElementById('amount').value) == false)
+		{
+			alert("Incorrect amount");
+			document.getElementById("bhi").disabled = false;
+			document.getElementById("blo").disabled = false;
+		}
+		else if(document.getElementById('amount').value > balance)
+		{
+			alert("Amount > Balance");
+			document.getElementById("bhi").disabled = false;
+			document.getElementById("blo").disabled = false;
+		}
+		else
+		{
+			fetch('https://stlx.online/rng.php?min=0&max=999&size=1')
+			.then(response => response.text())
+			.then((response) => {
+				var r = response;
+				balance = balance - (document.getElementById('amount').value);
+				var obj = JSON.parse(response);
+				animation(obj.response[0].result);
+				if(m == 2)
+				{
+					if(obj.response[0].result > 499)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				if(m == 3)
+				{
+					if(obj.response[0].result > 666)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				if(m == 5)
+				{
+					if(obj.response[0].result > 799)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				if(m == 10)
+				{
+					if(obj.response[0].result > 899)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				var bdiv = document.getElementById('balance');;
+				bdiv.innerHTML = "<b>" + balance + " STLX</b>";
+				
+				var bdiv = document.getElementById('json');;
+				bdiv.innerHTML = response;
+			});
+		}
+	}
+	
+	async function lo()
+	{
+		document.getElementById("bhi").disabled = true;
+		document.getElementById("blo").disabled = true;
+		if(isNumeric(document.getElementById('amount').value) == false)
+		{
+			alert("Incorrect amount");
+			document.getElementById("bhi").disabled = false;
+			document.getElementById("blo").disabled = false;
+		}
+		else if(document.getElementById('amount').value > balance)
+		{
+			alert("Amount > Balance");
+			document.getElementById("bhi").disabled = false;
+			document.getElementById("blo").disabled = false;
+		}
+		else
+		{
+			fetch('https://stlx.online/rng.php?min=0&max=999&size=1')
+			.then(response => response.text())
+			.then((response) => {
+				var r = response;
+				balance = balance - (document.getElementById('amount').value);
+				var obj = JSON.parse(response);
+				animation(obj.response[0].result);
+				if(m == 2)
+				{
+					if(obj.response[0].result < 500)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				if(m == 3)
+				{
+					if(obj.response[0].result < 333)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				if(m == 5)
+				{
+					if(obj.response[0].result < 200)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				if(m == 10)
+				{
+					if(obj.response[0].result < 100)
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "+" + document.getElementById('amount').value * m + " STLX";
+						balance = balance + (document.getElementById('amount').value * m);
+						document.getElementById("profit").classList.remove('red');
+						document.getElementById("profit").classList.add('green');
+					}
+					else
+					{
+						var pdiv = document.getElementById('profit');;
+						pdiv.innerHTML = "-" + document.getElementById('amount').value + " STLX";
+						document.getElementById("profit").classList.add('red');
+						document.getElementById("profit").classList.remove('green');
+					}
+				}
+				var bdiv = document.getElementById('balance');;
+				bdiv.innerHTML = "<b>" + balance + " STLX</b>";
+				
+				var bdiv = document.getElementById('json');;
+				bdiv.innerHTML = response;
+			});
+		}
+	}
+</script>
+<style>
+body { background: #111;}
+h2 { color: #fff; }
+</style>
+</head>
+
+<body>
+<div class="ui inverted menu">
+  <a class="header item" href="/"><i class="left arrow icon"></i> Back</a>
+  <a class="item" href="#"><i class="bitcoin icon"></i>BALANCE: <span id="balance" style="margin-left:8px;"><b>1000 STLX</b></span></a>
+</div>
+
+<div class="ui container">
+<table class="ui stackable inverted table">
+
+<tr>
+<td style="text-align: center;padding-bottom:48px;" colspan="3"><h1 id="number">000</h1><br>
+<button class="ui yellow button" id="bhi" onclick="hi();">BET HI</button>
+<button class="ui yellow button" id="blo" onclick="lo();">BET LO</button><br><br>
+<span id="x2" class="ui mini teal message" style="display:inline;">HI: 500-999 (50%), LO: 000-499 (50%)</span>
+<span id="x3" class="ui mini teal message" style="display:none;">HI: 667-999 (33%), LO: 000-332 (33%)</span>
+<span id="x5" class="ui mini teal message" style="display:none;">HI: 800-999 (20%), LO: 000-199 (20%)</span>
+<span id="x10" class="ui mini teal message" style="display:none;">HI: 900-999 (10%), LO: 000-099 (10%)</span>
+</td>
+</tr>
+<tr>
+<td style="width:30%;" valign="top">
+<b>BET AMOUNT:</b><br>
+<div class="ui input"><input autocomplete="off" id="amount" type="text" value="1"></div></td>
+<td style="width:40%;" valign="top">
+<b>MULTIPLIER:</b><br>
+<a href="#" id="bx2" class="ui blue button" onclick="changeMultiplier(2);">x2</a> 
+<a href="#" id="bx3" class="ui button"  onclick="changeMultiplier(3);">x3</a> 
+<a href="#" id="bx5" class="ui button"  onclick="changeMultiplier(5);">x5</a> 
+<a href="#" id="bx10" class="ui button"  onclick="changeMultiplier(10);">x10</a></td>
+<td style="width:30%;" valign="top">
+<b>PROFIT:</b><br>
+<div class="ui large label" id="profit">-----</div></td>
+</tr>
+<tr>
+<td colspan="3"><b>JSON:</b><br>
+<div class="ui form"><div class="field"><textarea cols="60" rows="8" disabled id="json"></textarea></div></div></td>
+</tr>
+<td colspan="3" style="text-align: center">
+<a style="color:#4078c0;" href="https://github.com/stlxonline/"><i class="github big icon"></i></a>
+<a style="color:#aaa;" href="https://stlx.online/"><i class="copyright big icon"></i></a>
+<a style="color:#00acee;"  href="https://github.com/stlxonline/"><i class="twitter big icon"></i></a>
+<a style="color:#3b5998;" href="https://github.com/stlxonline/"><i class="facebook big icon"></i></a>
+<a style="color:#FCAF45;" href="https://github.com/stlxonline/"><i class="instagram big icon"></i></a>
+<a style="color:#c4302b;"  href="https://github.com/stlxonline/"><i class="youtube big icon"></i></a></td>
+</tr>
+</table>
+</div>
+</body>
+
+</html>
