@@ -111,7 +111,7 @@
 		}
 		else
 		{
-			fetch('https://stlx.online/rng.php?min=0&max=999&size=1')
+			fetch('https://node1.stlx.online/api?q=rng&min=0&max=999&size=1')
 			.then(response => response.text())
 			.then((response) => {
 				var r = response;
